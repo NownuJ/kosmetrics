@@ -4,12 +4,27 @@ import 'screens/welcome_screen.dart';
 import 'screens/login_screen.dart';
 import 'screens/signup_step1_screen.dart';
 import 'screens/signup_step2_screen.dart';
-import 'screens/PlaceholderPage.dart';
+import 'screens/placeholder_page.dart';
+import 'models/user.dart';
+import 'models/signup_data.dart';
 
 void main() => runApp(MyApp());
 
 class MyApp extends StatelessWidget {
   MyApp({super.key});
+
+  final int MALE = 0;
+  final int FEMALE = 1;
+  final int DRY = 0;
+  final int NORMAL = 1;
+  final int OILY = 2;
+  final int COMBINATION = 3;
+  final int DRY_OILY = 4;
+
+  int newUserId = 0;
+  List<User> users = [];
+  // user has username, password, age, gender, skin type
+
 
   @override
   Widget build(BuildContext context) {
@@ -19,8 +34,8 @@ class MyApp extends StatelessWidget {
       routes: {
         '/': (context) => WelcomeScreen(),
         '/login': (context) => LoginScreen(),
-        '/signup_step1': (context) => SignupStep1Screen(),
-        '/signup_step2': (context) => SignupStep2Screen(),
+        '/signup_step1': (context) => SignupStep1Screen(signupData: SignupData()),
+        '/signup_step2': (context) => SignupStep2Screen(signupData: SignupData()),
         '/signup_step3': (context) => PlaceholderPage('Sign Up 3/4'),
         '/signup_step4': (context) => PlaceholderPage('Sign Up 4/4'),
         '/welcome_user': (context) => PlaceholderPage('Welcome User'),
