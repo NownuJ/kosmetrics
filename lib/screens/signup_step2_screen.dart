@@ -1,5 +1,6 @@
 // lib/screens/signup_step2_screen.dart
 import 'package:flutter/material.dart';
+import 'package:kosmetric/screens/signup_step3_screen.dart';
 import '../models/signup_data.dart';
 import '../screens/placeholder_page.dart';
 
@@ -27,7 +28,7 @@ class _SignupStep2ScreenState extends State<SignupStep2Screen> {
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => const PlaceholderPage('Sign Up 3/4'),
+        builder: (context) => SignupStep3Screen(signupData: widget.signupData),
       ),
     );
   }
@@ -43,7 +44,7 @@ class _SignupStep2ScreenState extends State<SignupStep2Screen> {
           children: [
             TextField(
               controller: _nicknameController,
-              decoration: const InputDecoration(labelText: 'Skincare Nickname'),
+              decoration: const InputDecoration(labelText: 'Nickname'),
             ),
             const SizedBox(height: 32),
             ElevatedButton(

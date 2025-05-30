@@ -1,8 +1,11 @@
 // lib/screens/welcome_screen.dart
 import 'package:flutter/material.dart';
+import 'package:kosmetric/models/signup_data.dart';
 
 class WelcomeScreen extends StatelessWidget {
-  const WelcomeScreen({super.key});
+  final SignupData signupData;
+
+  const WelcomeScreen({super.key, required this.signupData});
 
   @override
   Widget build(BuildContext context) {
