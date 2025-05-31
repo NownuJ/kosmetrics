@@ -1,7 +1,5 @@
 // lib/main.dart
 import 'package:flutter/material.dart';
-import 'package:kosmetric/screens/signup_step3_screen.dart';
-import 'package:kosmetric/screens/signup_step4_screen.dart';
 import 'screens/welcome_screen.dart';
 import 'screens/login_screen.dart';
 import 'screens/signup_step1_screen.dart';
@@ -34,18 +32,17 @@ class MyApp extends StatelessWidget {
       title: 'Signup Flow Demo',
       initialRoute: '/',
       routes: {
-        '/': (context) => WelcomeScreen(signupData: SignupData()),
+        '/': (context) => WelcomeScreen(),
         '/login': (context) => LoginScreen(),
         '/signup_step1': (context) => SignupStep1Screen(signupData: SignupData()),
         '/signup_step2': (context) => SignupStep2Screen(signupData: SignupData()),
-        '/signup_step3': (context) => SignupStep3Screen(signupData: SignupData()),
-        '/signup_step4': (context) => SignupStep4Screen(signupData: SignupData()),
+        '/signup_step3': (context) => PlaceholderPage('Sign Up 3/4'),
+        '/signup_step4': (context) => PlaceholderPage('Sign Up 4/4'),
         '/welcome_user': (context) => PlaceholderPage('Welcome User'),
         '/home': (context) => PlaceholderPage('Home'),
         // to navigate through routes,
         // use Navigator.pushNamed(context, '/route_name')
       },
-
     );
   }
 }
