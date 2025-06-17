@@ -1,7 +1,9 @@
 // lib/main.dart
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:kosmetric/screens/signup_step3_screen.dart';
-import 'package:kosmetric/screens/signup_step4_screen.dart';
+import 'firebase_options.dart';
+import 'screens/signup_step3_screen.dart';
+import 'screens/signup_step4_screen.dart';
 import 'screens/welcome_screen.dart';
 import 'screens/login_screen.dart';
 import 'screens/signup_step1_screen.dart';
@@ -10,7 +12,12 @@ import 'screens/placeholder_page.dart';
 import 'models/user.dart';
 import 'models/signup_data.dart';
 
-void main() => runApp(MyApp());
+void main() async {
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
+  runApp(MyApp());
+}
 
 class MyApp extends StatelessWidget {
   MyApp({super.key});
