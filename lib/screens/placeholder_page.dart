@@ -10,7 +10,7 @@ class PlaceholderPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: Text(title)),
-      body: Center(child: Text('$title Page')),
+      body: Center(child: Text('$title Placeholder Page')),
     );
   }
 }

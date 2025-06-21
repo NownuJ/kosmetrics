@@ -2,6 +2,7 @@
 import 'package:flutter/material.dart';
 import '../models/signup_data.dart';
 import '../screens/placeholder_page.dart';
+import '../screens/home_page.dart';
 
 
 class StartScreen extends StatelessWidget {
@@ -32,10 +33,10 @@ class StartScreen extends StatelessWidget {
               const SizedBox(height: 32),
               ElevatedButton(
                 onPressed: () {
-                  Navigator.push(
+                  Navigator.pushReplacement(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => const PlaceholderPage('Home'),
+                      builder: (context) => HomePage(), // ← navigate to your real home screen
                     ),
                   );
                 },

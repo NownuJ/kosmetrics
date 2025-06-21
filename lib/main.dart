@@ -13,6 +13,7 @@ import 'models/user.dart';
 import 'models/signup_data.dart';
 
 void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
