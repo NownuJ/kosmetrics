@@ -14,7 +14,7 @@ class SignupStep4Screen extends StatefulWidget {
 
 class _SignupStep4ScreenState extends State<SignupStep4Screen> {
   String? _selectedSkinType;
-  final List<String> _skinTypes = ['Dry', 'Oily', 'Combination', 'Normal', 'Dry and Oily'];
+  final List<String> _skinTypes = ['Dry', 'Oily', 'Combination', 'Normal', 'Dry & Oily'];
 
   void _goToNextStep() {
     if (_selectedSkinType != null) {
@@ -31,7 +31,7 @@ class _SignupStep4ScreenState extends State<SignupStep4Screen> {
         case 'Normal':
           widget.signupData.skinType = 3;
           break;
-        case 'Dry and Oily':
+        case 'Dry & Oily':
           widget.signupData.skinType = 4;
           break;
       }

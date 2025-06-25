@@ -1,4 +1,3 @@
-// lib/screens/welcome_screen.dart
 import 'package:flutter/material.dart';
 import 'package:kosmetric/models/signup_data.dart';
 

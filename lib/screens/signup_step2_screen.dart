@@ -2,7 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:kosmetric/screens/signup_step3_screen.dart';
 import '../models/signup_data.dart';
-import '../screens/placeholder_page.dart';
+
 
 class SignupStep2Screen extends StatefulWidget {
   final SignupData signupData;

@@ -31,7 +31,7 @@ class _SignupStep3ScreenState extends State<SignupStep3Screen> {
         case 'M':
           widget.signupData.gender = 1;
           break;
-        case 'PNTS':
+        case 'Prefer not to say':
           widget.signupData.gender = 2;
           break;
       }
@@ -61,7 +61,7 @@ class _SignupStep3ScreenState extends State<SignupStep3Screen> {
             const SizedBox(height: 12),
             Wrap(
               spacing: 12,
-              children: ['F', 'M', 'PNTS'].map((gender) {
+              children: ['Female', 'Male', 'Prefer not to say'].map((gender) {
                 final isSelected = _selectedGender == gender;
                 return ChoiceChip(
                   label: Text(gender),

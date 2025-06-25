@@ -1,10 +1,7 @@
-// this is the home page of the app that displays
-// 3 random top 3 products.
-// also has search bars and stuff on the bottom
-
+// home_page.dart
 import 'package:flutter/material.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import '../models/product_model.dart';
-import '../misc/firestore_service.dart';
 import 'product_detail_page.dart';
 
 class HomePage extends StatefulWidget {
@@ -13,7 +10,6 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  final FirestoreService _firestoreService = FirestoreService();
   List<Product> _products = [];
 
   @override
@@ -22,19 +18,21 @@ class _HomePageState extends State<HomePage> {
     _loadProducts();
   }
 
-  void _loadProducts() async {
-    final products = await _firestoreService.fetchAllProducts();
-    products.shuffle(); // for randomness
+  Future<void> _loadProducts() async {
+    final snapshot = await FirebaseFirestore.instance.collection('cosmetics').get();
+    final products = snapshot.docs.map((doc) => Product.fromFirestore(doc)).toList();
     setState(() {
-      _products = products.take(6).toList(); // Take only a few for now
+      _products = products;
     });
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('Top Products')),
-      body: ListView.builder(
+      appBar: AppBar(title: const Text('Top Sunscreens')), //to be replaced with search bar
+      body: _products.isEmpty // to be replaced by 3 ranking pages
+          ? const Center(child: CircularProgressIndicator())
+          : ListView.builder(
         itemCount: _products.length,
         itemBuilder: (context, index) {
           final product = _products[index];
@@ -53,7 +51,7 @@ class _HomePageState extends State<HomePage> {
           );
         },
       ),
+      // bottomAppbar to be made (three icons)
     );
   }
 }
-

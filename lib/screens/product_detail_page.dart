@@ -1,6 +1,4 @@
-
-// this is the page when user clicks on individual products for more info about them.
-
+// lib/screens/product_detail_page.dart
 import 'package:flutter/material.dart';
 import '../models/product_model.dart';
 
@@ -22,7 +20,6 @@ class ProductDetailPage extends StatelessWidget {
           IconButton(
             icon: Icon(Icons.home),
             onPressed: () {
-              // Replace with actual home route if using named routes
               Navigator.popUntil(context, (route) => route.isFirst);
             },
           ),
@@ -33,7 +30,6 @@ class ProductDetailPage extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Product Image
             Center(
               child: Image.network(
                 product.imageUrl,
@@ -43,8 +39,6 @@ class ProductDetailPage extends StatelessWidget {
               ),
             ),
             SizedBox(height: 16),
-
-            // Brand & Name
             Text(
               product.brand,
               style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
@@ -54,8 +48,6 @@ class ProductDetailPage extends StatelessWidget {
               style: TextStyle(fontSize: 16),
             ),
             SizedBox(height: 8),
-
-            // Rating
             Row(
               children: [
                 Icon(Icons.star, color: Colors.amber),
@@ -64,12 +56,14 @@ class ProductDetailPage extends StatelessWidget {
               ],
             ),
             SizedBox(height: 16),
-
-            // Scores
             _buildScoreRow("Hydration", product.hydration),
             _buildScoreRow("Oiliness", product.oiliness),
             _buildScoreRow("Irritation", product.irritation),
             _buildScoreRow("Stickiness", product.stickiness),
+            SizedBox(height: 16),
+            _buildIngredientSection("Low", product.lowIngredients),
+            _buildIngredientSection("Medium", product.mediumIngredients),
+            _buildIngredientSection("High", product.highIngredients),
           ],
         ),
       ),
@@ -95,6 +89,22 @@ class ProductDetailPage extends StatelessWidget {
           Text(score.toStringAsFixed(1)),
         ],
       ),
+    );
+  }
+
+  Widget _buildIngredientSection(String label, List<String> ingredients) {
+    if (ingredients.isEmpty || (ingredients.length == 1 && ingredients[0].toLowerCase() == 'null')) {
+      return SizedBox.shrink();
+    }
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(label, style: TextStyle(fontWeight: FontWeight.bold)),
+        SizedBox(height: 4),
+        ...ingredients.map((i) => Text('- $i')).toList(),
+        SizedBox(height: 8),
+      ],
     );
   }
 }

@@ -12,6 +12,9 @@ import 'screens/placeholder_page.dart';
 import 'models/user.dart';
 import 'models/signup_data.dart';
 
+
+
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
@@ -50,6 +53,9 @@ class MyApp extends StatelessWidget {
         '/signup_step4': (context) => SignupStep4Screen(signupData: SignupData()),
         '/welcome_user': (context) => PlaceholderPage('Welcome User'),
         '/home': (context) => PlaceholderPage('Home'),
+
+
+
         // to navigate through routes,
         // use Navigator.pushNamed(context, '/route_name')
       },

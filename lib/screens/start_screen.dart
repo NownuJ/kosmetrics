@@ -7,8 +7,8 @@ import '../screens/home_page.dart';
 
 class StartScreen extends StatelessWidget {
   final SignupData signupData;
-  final genderText = ['Male', 'Female', 'PNTS'];
-  final skinTypeText = ['Dry', 'Oily', 'Combination', 'Normal', 'Dry and Oily'];
+  final genderText = ['Male', 'Female', 'Prefer not to say'];
+  final skinTypeText = ['Dry', 'Oily', 'Combination', 'Normal', 'Dry & Oily'];
 
 
   StartScreen({super.key, required this.signupData});
@@ -28,15 +28,21 @@ class StartScreen extends StatelessWidget {
               ),
               const SizedBox(height: 16),
               Text('Age: ${signupData.age}'),
-              Text('Gender: ${genderText[signupData.gender]}'),
-              Text('Skin Type: ${skinTypeText[signupData.skinType]}'),
+              Text('Gender: ${signupData.gender != null && signupData.gender >= 0 && signupData.gender < genderText.length
+                  ? genderText[signupData.gender]
+                  : 'Unknown'}'),
+
+              Text('Skin Type: ${signupData.skinType != null && signupData.skinType >= 0 && signupData.skinType < skinTypeText.length
+                  ? skinTypeText[signupData.skinType]
+                  : 'Unknown'}'),
+
               const SizedBox(height: 32),
               ElevatedButton(
                 onPressed: () {
                   Navigator.pushReplacement(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => HomePage(), // ← navigate to your real home screen
+                      builder: (context) => HomePage(),
                     ),
                   );
                 },
