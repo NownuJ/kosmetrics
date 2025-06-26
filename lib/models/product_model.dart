@@ -4,6 +4,7 @@ class Product {
   final String name;
   final String brand;
   final String imageUrl;
+  final String category;
   final double rating;
   final double hydration;
   final double oiliness;
@@ -18,6 +19,7 @@ class Product {
     required this.name,
     required this.brand,
     required this.imageUrl,
+    required this.category,
     required this.rating,
     required this.hydration,
     required this.oiliness,
@@ -40,6 +42,7 @@ class Product {
       name: data['name'] ?? '',
       brand: data['brand'] ?? '',
       imageUrl: data['imageUrl'] ?? '',
+      category: data['category'] ?? '',
       rating: (data['rating'] ?? 0).toDouble(),
       hydration: (data['hydration'] ?? 0).toDouble(),
       oiliness: (data['oiliness'] ?? 0).toDouble(),
@@ -51,3 +54,4 @@ class Product {
     );
   }
 }
+

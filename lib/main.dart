@@ -11,6 +11,7 @@ import 'screens/signup_step2_screen.dart';
 import 'screens/placeholder_page.dart';
 import 'models/user.dart';
 import 'models/signup_data.dart';
+import 'screens/home_page.dart';
 
 
 
@@ -52,9 +53,7 @@ class MyApp extends StatelessWidget {
         '/signup_step3': (context) => SignupStep3Screen(signupData: SignupData()),
         '/signup_step4': (context) => SignupStep4Screen(signupData: SignupData()),
         '/welcome_user': (context) => PlaceholderPage('Welcome User'),
-        '/home': (context) => PlaceholderPage('Home'),
-
-
+        '/home': (context) => HomePage(),
 
         // to navigate through routes,
         // use Navigator.pushNamed(context, '/route_name')

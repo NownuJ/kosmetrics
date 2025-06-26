@@ -39,12 +39,7 @@ class StartScreen extends StatelessWidget {
               const SizedBox(height: 32),
               ElevatedButton(
                 onPressed: () {
-                  Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => HomePage(),
-                    ),
-                  );
+                  Navigator.pushReplacementNamed(context, '/home');
                 },
                 child: const Text("Let's start!"),
               ),
