@@ -25,10 +25,10 @@ class _SignupStep3ScreenState extends State<SignupStep3Screen> {
   void _goToNextStep() {
     if (_selectedGender != null) {
       switch (_selectedGender) {
-        case 'F':
+        case 'Female':
           widget.signupData.gender = 0;
           break;
-        case 'M':
+        case 'Male':
           widget.signupData.gender = 1;
           break;
         case 'Prefer not to say':

@@ -1,9 +1,11 @@
 // home_page.dart
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:kosmetric/screens/category_page.dart';
 import '../models/product_model.dart';
 import 'product_detail_page.dart';
 import 'placeholder_page.dart';
+import 'category_page.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -11,7 +13,8 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  List<Product> _products = [];
+  List<Product> _allProducts = [];          // All products from Firestore
+  List<Product> _filteredProducts = [];     // What the user sees (search result)
   int _selectedIndex = 1; // Home tab index
   final TextEditingController _searchController = TextEditingController();
 
@@ -25,13 +28,25 @@ class _HomePageState extends State<HomePage> {
     final snapshot = await FirebaseFirestore.instance.collection('cosmetics').get();
     final products = snapshot.docs.map((doc) => Product.fromFirestore(doc)).toList();
     setState(() {
-      _products = products;
+      _allProducts = products;
+      _filteredProducts = products;
     });
   }
 
   void _onItemTapped(int index) {
     setState(() {
       _selectedIndex = index;
+    });
+  }
+
+  void _searchProducts(String query) {
+    final lowerQuery = query.toLowerCase();
+    final filtered = _allProducts.where((product) {
+      return product.name.toLowerCase().contains(lowerQuery);
+    }).toList();
+
+    setState(() {
+      _filteredProducts = filtered;
     });
   }
 
@@ -45,20 +60,29 @@ class _HomePageState extends State<HomePage> {
             decoration: InputDecoration(
               hintText: 'Search products...',
               prefixIcon: Icon(Icons.search),
+              suffixIcon: _searchController.text.isNotEmpty
+                  ? IconButton(
+                icon: Icon(Icons.clear),
+                onPressed: () {
+                  _searchController.clear();
+                  _searchProducts('');
+                },
+              )
+                  : null,
               border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
+
             ),
-            onChanged: (query) {
-              // Add search functionality
-            },
+            onChanged: _searchProducts,
           ),
         ),
+
         Expanded(
-          child: _products.isEmpty
+          child: _filteredProducts.isEmpty
               ? const Center(child: CircularProgressIndicator())
               : ListView.builder(
-            itemCount: _products.length,
+            itemCount: _filteredProducts.length,
             itemBuilder: (context, index) {
-              final product = _products[index];
+              final product = _filteredProducts[index];
               return ListTile(
                 leading: Image.network(product.imageUrl, width: 50),
                 title: Text(product.name),
@@ -85,7 +109,7 @@ class _HomePageState extends State<HomePage> {
       body: IndexedStack(
         index: _selectedIndex,
         children: [
-          const PlaceholderPage('Category'),
+          CategoryPage(),
           _buildHomePage(),
           const PlaceholderPage('My Page'),
         ],

@@ -7,7 +7,7 @@ import '../screens/home_page.dart';
 
 class StartScreen extends StatelessWidget {
   final SignupData signupData;
-  final genderText = ['Male', 'Female', 'Prefer not to say'];
+  final genderText = ['Female', 'Male', 'Prefer not to say'];
   final skinTypeText = ['Dry', 'Oily', 'Combination', 'Normal', 'Dry & Oily'];
 
 
