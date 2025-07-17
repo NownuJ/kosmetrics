@@ -2,6 +2,8 @@
 import 'package:flutter/material.dart';
 import '../models/signup_data.dart';
 import '../screens/start_screen.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class SignupStep4Screen extends StatefulWidget {
   final SignupData signupData;
@@ -16,7 +18,7 @@ class _SignupStep4ScreenState extends State<SignupStep4Screen> {
   String? _selectedSkinType;
   final List<String> _skinTypes = ['Dry', 'Oily', 'Combination', 'Normal', 'Dry & Oily'];
 
-  void _goToNextStep() {
+  void _goToNextStep() async {
     if (_selectedSkinType != null) {
       switch (_selectedSkinType) {
         case 'Dry':
@@ -37,13 +39,37 @@ class _SignupStep4ScreenState extends State<SignupStep4Screen> {
       }
     }
 
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => StartScreen(signupData: widget.signupData),
-      ),
-    );
+    try {
+      final userCredential = await FirebaseAuth.instance
+          .createUserWithEmailAndPassword(
+        email: widget.signupData.username,
+        password: widget.signupData.password,
+      );
+
+      await FirebaseFirestore.instance
+          .collection('users')
+          .doc(userCredential.user!.uid)
+          .set({
+        'nickname': widget.signupData.nickname,
+        'age': widget.signupData.age,
+        'gender': widget.signupData.gender,
+        'skinType': widget.signupData.skinType,
+        'createdAt': FieldValue.serverTimestamp(),
+      });
+
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+          builder: (context) => StartScreen(signupData: widget.signupData),
+        ),
+      );
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text("Error in Sign up: ${e.toString()}")),
+      );
+    }
   }
+
 
   @override
   Widget build(BuildContext context) {

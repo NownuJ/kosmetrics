@@ -2,6 +2,7 @@
 import 'package:flutter/material.dart';
 import '../models/signup_data.dart';
 import 'signup_step2_screen.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class SignupStep1Screen extends StatefulWidget {
   final SignupData signupData;
@@ -23,18 +24,33 @@ class _SignupStep1ScreenState extends State<SignupStep1Screen> {
     super.dispose();
   }
 
-  void _goToNextStep() {
-    // Update shared SignupData object
-    widget.signupData.username = _emailController.text;
-    widget.signupData.password = _passwordController.text;
+  void _goToNextStep() async {
+    final email = _emailController.text.trim();
+    final password = _passwordController.text;
 
-    // Navigate to Step 2
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => SignupStep2Screen(signupData: widget.signupData),
-      ),
-    );
+    try {
+      await FirebaseAuth.instance.createUserWithEmailAndPassword(
+        email: email,
+        password: password,
+      );
+
+      final user = FirebaseAuth.instance.currentUser;
+      await user?.delete();
+
+      widget.signupData.username = email;
+      widget.signupData.password = password;
+
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => SignupStep2Screen(signupData: widget.signupData),
+        ),
+      );
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text("The password must be at least 6 characters. ${e.toString()}")),
+      );
+    }
   }
 
   @override
