@@ -1,14 +1,47 @@
 // lib/screens/product_detail_page.dart
 import 'package:flutter/material.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import '../models/product_model.dart';
+import 'review_form.dart';
 
-class ProductDetailPage extends StatelessWidget {
+class ProductDetailPage extends StatefulWidget {
   final Product product;
 
   const ProductDetailPage({Key? key, required this.product}) : super(key: key);
 
   @override
+  State<ProductDetailPage> createState() => _ProductDetailPageState();
+}
+
+class _ProductDetailPageState extends State<ProductDetailPage> {
+  late Product product;
+
+  @override
+  void initState() {
+    super.initState();
+    product = widget.product;
+    _fetchUpdatedProduct();
+  }
+
+  Future<void> _fetchUpdatedProduct() async {
+    try {
+      final snapshot = await FirebaseFirestore.instance
+          .collection('products')
+          .doc(widget.product.id)
+          .get();
+
+      setState(() {
+        product = Product.fromFirestore(snapshot);
+      });
+    } catch (e) {
+      print("Failed to fetch updated product: $e");
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
+    print('product.id in detail page: ${product.id}');
+
     return Scaffold(
       appBar: AppBar(
         title: Text(product.name),
@@ -64,6 +97,7 @@ class ProductDetailPage extends StatelessWidget {
             _buildIngredientSection("Low", product.lowIngredients),
             _buildIngredientSection("Medium", product.mediumIngredients),
             _buildIngredientSection("High", product.highIngredients),
+            ReviewForm(product: product),
           ],
         ),
       ),
@@ -93,7 +127,8 @@ class ProductDetailPage extends StatelessWidget {
   }
 
   Widget _buildIngredientSection(String label, List<String> ingredients) {
-    if (ingredients.isEmpty || (ingredients.length == 1 && ingredients[0].toLowerCase() == 'null')) {
+    if (ingredients.isEmpty ||
+        (ingredients.length == 1 && ingredients[0].toLowerCase() == 'null')) {
       return SizedBox.shrink();
     }
 

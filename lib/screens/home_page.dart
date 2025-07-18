@@ -13,8 +13,8 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  List<Product> _allProducts = [];          // All products from Firestore
-  List<Product> _filteredProducts = [];     // What the user sees (search result)
+  List<Product> _allProducts = [];
+  List<Product> _filteredProducts = [];
   int _selectedIndex = 1; // Home tab index
   final TextEditingController _searchController = TextEditingController();
 
@@ -25,7 +25,7 @@ class _HomePageState extends State<HomePage> {
   }
 
   Future<void> _loadProducts() async {
-    final snapshot = await FirebaseFirestore.instance.collection('cosmetics').get();
+    final snapshot = await FirebaseFirestore.instance.collection('products').get();
     final products = snapshot.docs.map((doc) => Product.fromFirestore(doc)).toList();
     setState(() {
       _allProducts = products;

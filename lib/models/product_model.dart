@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class Product {
+  final String id;
   final String name;
   final String brand;
   final String imageUrl;
@@ -15,6 +16,7 @@ class Product {
   final List<String> highIngredients;
 
   Product({
+    required this.id,
     required this.name,
     required this.brand,
     required this.imageUrl,
@@ -37,17 +39,26 @@ class Product {
     }
 
     return Product(
-      name: data['name'] ?? '',
-      brand: data['brand'] ?? '',
+      id: doc.id,
+      name: data['name'] ?? data['Product Name'] ?? '',
+      brand: data['brand'] ?? data['Brand'] ?? '',
       imageUrl: data['imageUrl'] ?? '',
-      rating: (data['rating'] ?? 0).toDouble(),
-      hydration: (data['hydration'] ?? 0).toDouble(),
-      oiliness: (data['oiliness'] ?? 0).toDouble(),
-      irritation: (data['irritation'] ?? 0).toDouble(),
-      stickiness: (data['stickiness'] ?? 0).toDouble(),
+      rating: _parseDouble(data['rating']),
+      hydration: _parseDouble(data['Hydration']),
+      oiliness: _parseDouble(data['Oiliness']),
+      irritation: _parseDouble(data['Irritation']),
+      stickiness: _parseDouble(data['Stickiness']),
       lowIngredients: parseIngredients(data['low']),
       mediumIngredients: parseIngredients(data['medium']),
       highIngredients: parseIngredients(data['high']),
     );
+  }
+
+  static double _parseDouble(dynamic value) {
+    if (value == null) return 0.0;
+    if (value is int) return value.toDouble();
+    if (value is double) return value;
+    if (value is String) return double.tryParse(value) ?? 0.0;
+    return 0.0;
   }
 }
