@@ -15,6 +15,10 @@ class Product {
   final List<String> mediumIngredients;
   final List<String> highIngredients;
 
+  // These fields should be added if you're using them for ranking
+  final List<dynamic> ageRatings;
+  final List<dynamic> skinTypeRatings;
+
   Product({
     required this.id,
     required this.name,
@@ -28,14 +32,20 @@ class Product {
     required this.lowIngredients,
     required this.mediumIngredients,
     required this.highIngredients,
+    required this.ageRatings,
+    required this.skinTypeRatings,
   });
 
   factory Product.fromFirestore(DocumentSnapshot doc) {
     final data = doc.data() as Map<String, dynamic>;
 
-    List<String> parseIngredients(String? raw) {
-      if (raw == null || raw.trim().isEmpty || raw.trim().toLowerCase() == 'null') return [];
-      return raw.split(',').map((e) => e.trim()).toList();
+    List<String> parseIngredients(dynamic raw) {
+      if (raw == null) return [];
+      if (raw is String) {
+        if (raw.trim().isEmpty || raw.trim().toLowerCase() == 'null') return [];
+        return raw.split(',').map((e) => e.trim()).toList();
+      }
+      return [];
     }
 
     return Product(
@@ -51,6 +61,8 @@ class Product {
       lowIngredients: parseIngredients(data['low']),
       mediumIngredients: parseIngredients(data['medium']),
       highIngredients: parseIngredients(data['high']),
+      ageRatings: data['ageRatings'] ?? [],
+      skinTypeRatings: data['skinTypeRatings'] ?? [],
     );
   }
 

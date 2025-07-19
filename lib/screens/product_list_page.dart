@@ -25,7 +25,7 @@ class _ProductListPageState extends State<ProductListPage> {
   Future<void> _loadCategoryProducts() async {
     final snapshot = await FirebaseFirestore.instance
         .collection('products')
-        .where('category', isEqualTo: widget.category)
+        .where('Category', isEqualTo: widget.category)
         .get();
     final products = snapshot.docs.map((doc) => Product.fromFirestore(doc)).toList();
     setState(() {
