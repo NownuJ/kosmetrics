@@ -7,7 +7,7 @@ import 'review_form.dart';
 class ProductDetailPage extends StatefulWidget {
   final Product product;
 
-  const ProductDetailPage({Key? key, required this.product}) : super(key: key);
+  const ProductDetailPage({super.key, required this.product});
 
   @override
   State<ProductDetailPage> createState() => _ProductDetailPageState();
@@ -137,7 +137,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
       children: [
         Text(label, style: TextStyle(fontWeight: FontWeight.bold)),
         SizedBox(height: 4),
-        ...ingredients.map((i) => Text('- $i')).toList(),
+        ...ingredients.map((i) => Text('- $i')),
         SizedBox(height: 8),
       ],
     );

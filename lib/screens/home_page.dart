@@ -5,9 +5,10 @@ import 'package:kosmetric/screens/category_page.dart';
 import '../models/product_model.dart';
 import 'product_detail_page.dart';
 import 'placeholder_page.dart';
-import 'category_page.dart';
 
 class HomePage extends StatefulWidget {
+  const HomePage({super.key});
+
   @override
   _HomePageState createState() => _HomePageState();
 }

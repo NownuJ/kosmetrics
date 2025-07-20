@@ -4,6 +4,8 @@ import '../models/product_model.dart';
 import 'product_detail_page.dart';
 
 class CategoryPage extends StatefulWidget {
+  const CategoryPage({super.key});
+
   @override
   _CategoryPageState createState() => _CategoryPageState();
 }

@@ -7,7 +7,7 @@ class RankingListPage extends StatefulWidget {
   final String? selectedAge;
   final String? selectedSkinType;
 
-  const RankingListPage({this.selectedAge, this.selectedSkinType, Key? key}) : super(key: key);
+  const RankingListPage({this.selectedAge, this.selectedSkinType, super.key});
 
   @override
   _RankingListPageState createState() => _RankingListPageState();

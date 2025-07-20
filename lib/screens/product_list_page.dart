@@ -6,7 +6,7 @@ import 'product_detail_page.dart';
 class ProductListPage extends StatefulWidget {
   final String category;
 
-  ProductListPage({required this.category});
+  const ProductListPage({super.key, required this.category});
 
   @override
   _ProductListPageState createState() => _ProductListPageState();

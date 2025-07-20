@@ -1,7 +1,6 @@
 // lib/screens/start_screen.dart
 import 'package:flutter/material.dart';
 import '../models/signup_data.dart';
-import '../screens/placeholder_page.dart';
 import '../screens/home_page.dart';
 
 
@@ -28,11 +27,11 @@ class StartScreen extends StatelessWidget {
               ),
               const SizedBox(height: 16),
               Text('Age: ${signupData.age}'),
-              Text('Gender: ${signupData.gender != null && signupData.gender >= 0 && signupData.gender < genderText.length
+              Text('Gender: ${signupData.gender >= 0 && signupData.gender < genderText.length
                   ? genderText[signupData.gender]
                   : 'Unknown'}'),
 
-              Text('Skin Type: ${signupData.skinType != null && signupData.skinType >= 0 && signupData.skinType < skinTypeText.length
+              Text('Skin Type: ${signupData.skinType >= 0 && signupData.skinType < skinTypeText.length
                   ? skinTypeText[signupData.skinType]
                   : 'Unknown'}'),
 

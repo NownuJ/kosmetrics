@@ -48,6 +48,22 @@ class Product {
       return [];
     }
 
+    List<Map<String, dynamic>> mapToRatingList(dynamic raw) {
+      if (raw is Map) {
+        return List.generate(5, (i) {
+          final entry = raw[i.toString()];
+          if (entry is Map) {
+            return {
+              'avg': (entry['avg'] as num?)?.toDouble() ?? 0.0,
+              'count': (entry['count'] as num?)?.toInt() ?? 0,
+            };
+          }
+          return {'avg': 0.0, 'count': 0};
+        });
+      }
+      return List.generate(5, (_) => {'avg': 0.0, 'count': 0});
+    }
+
     return Product(
       id: doc.id,
       name: data['name'] ?? data['Product Name'] ?? '',
@@ -61,8 +77,8 @@ class Product {
       lowIngredients: parseIngredients(data['low']),
       mediumIngredients: parseIngredients(data['medium']),
       highIngredients: parseIngredients(data['high']),
-      ageRatings: data['ageRatings'] ?? [],
-      skinTypeRatings: data['skinTypeRatings'] ?? [],
+      ageRatings: mapToRatingList(data['ageRatings']),
+      skinTypeRatings: mapToRatingList(data['skinTypeRatings']),
     );
   }
 
@@ -73,4 +89,5 @@ class Product {
     if (value is String) return double.tryParse(value) ?? 0.0;
     return 0.0;
   }
+
 }
