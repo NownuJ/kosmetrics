@@ -2,39 +2,67 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import '../models/product_model.dart';
 import 'product_detail_page.dart';
+import '../services/product_ranking_service.dart';
 
 class CategoryPage extends StatefulWidget {
-  const CategoryPage({super.key});
-
   @override
   _CategoryPageState createState() => _CategoryPageState();
 }
 
 class _CategoryPageState extends State<CategoryPage> {
   final List<String> categories = [
-    'Ranking',
-    'Toners',
-    'Lotions',
-    'Sunscreens',
-    'Moisturisers',
-    'Cleansers'
+    'Ranking', 'Toners', 'Lotions', 'Sunscreens', 'Moisturisers', 'Cleansers'
   ];
-
-  String selectedCategory = 'Ranking';
-  String? selectedAge;
-  String? selectedSkinType;
-  List<Product> rankedProducts = [];
-  List<Product> categoryProducts = [];
-  bool isRankingLoading = false;
-  bool isCategoryLoading = false;
 
   final List<String> ageOptions = ['Clear Selection', '20s', '30s', '40s', '50s', '60s+'];
   final List<String> skinTypeOptions = ['Clear Selection', 'Dry', 'Oily', 'Combination', 'Normal', 'Dry & Oily'];
 
+  String selectedCategory = 'Ranking';
+  String? selectedAge;
+  String? selectedSkinType;
+
+  List<Product> displayedProducts = [];
+  bool isLoading = false;
+
   @override
   void initState() {
     super.initState();
-    _loadRankedProducts();
+    _loadProducts();
+  }
+
+  Future<void> _loadProducts() async {
+    setState(() => isLoading = true);
+
+    QuerySnapshot snapshot;
+    if (selectedCategory == 'Ranking') {
+      snapshot = await FirebaseFirestore.instance.collection('products').get();
+    } else {
+      snapshot = await FirebaseFirestore.instance
+          .collection('products')
+          .where('Category', isEqualTo: selectedCategory)
+          .get();
+    }
+
+    List<Product> products = snapshot.docs.map((doc) => Product.fromFirestore(doc)).toList();
+
+    int? ageIndex = selectedAge != null ? ageOptions.indexOf(selectedAge!) - 1 : null;
+    int? skinIndex = selectedSkinType != null ? skinTypeOptions.indexOf(selectedSkinType!) - 1 : null;
+
+    displayedProducts = ProductRankingService.rankProducts(
+      products: products,
+      ageIndex: ageIndex,
+      skinTypeIndex: skinIndex,
+    );
+
+    setState(() => isLoading = false);
+  }
+
+  void _onFilterChanged({String? age, String? skinType}) {
+    setState(() {
+      selectedAge = age;
+      selectedSkinType = skinType;
+    });
+    _loadProducts();
   }
 
   @override
@@ -43,8 +71,7 @@ class _CategoryPageState extends State<CategoryPage> {
       appBar: AppBar(
         automaticallyImplyLeading: false,
         title: Text(selectedCategory),
-        bottom: selectedCategory == 'Ranking'
-            ? PreferredSize(
+        bottom: PreferredSize(
           preferredSize: Size.fromHeight(40.0),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -56,8 +83,7 @@ class _CategoryPageState extends State<CategoryPage> {
                     builder: (_) => _buildPicker(ageOptions),
                   );
                   if (selected != null) {
-                    setState(() => selectedAge = selected == 'Clear Selection' ? null : selected);
-                    _loadRankedProducts();
+                    _onFilterChanged(age: selected == 'Clear Selection' ? null : selected, skinType: selectedSkinType);
                   }
                 },
                 child: Text(selectedAge ?? "Age"),
@@ -69,16 +95,14 @@ class _CategoryPageState extends State<CategoryPage> {
                     builder: (_) => _buildPicker(skinTypeOptions),
                   );
                   if (selected != null) {
-                    setState(() => selectedSkinType = selected == 'Clear Selection' ? null : selected);
-                    _loadRankedProducts();
+                    _onFilterChanged(age: selectedAge, skinType: selected == 'Clear Selection' ? null : selected);
                   }
                 },
                 child: Text(selectedSkinType ?? "Skin Type"),
               ),
             ],
           ),
-        )
-            : null,
+        ),
       ),
       body: Row(
         children: [
@@ -93,29 +117,17 @@ class _CategoryPageState extends State<CategoryPage> {
                   title: Text(category),
                   selected: selectedCategory == category,
                   onTap: () {
-                    setState(() {
-                      selectedCategory = category;
-                    });
-                    if (category == 'Ranking') {
-                      _loadRankedProducts();
-                    } else {
-                      _loadCategoryProducts(category);
-                    }
+                    setState(() => selectedCategory = category);
+                    _loadProducts();
                   },
                 );
               },
             ),
           ),
           Expanded(
-            child: selectedCategory == 'Ranking'
-                ? isRankingLoading
+            child: isLoading
                 ? Center(child: CircularProgressIndicator())
-                : rankedProducts.isEmpty
-                ? Center(child: Text('Select Age or Skin Type to see rankings'))
-                : _buildProductList(rankedProducts, true)
-                : isCategoryLoading
-                ? Center(child: CircularProgressIndicator())
-                : _buildProductList(categoryProducts, false),
+                : _buildProductList(displayedProducts),
           ),
         ],
       ),
@@ -132,8 +144,9 @@ class _CategoryPageState extends State<CategoryPage> {
     );
   }
 
-  Widget _buildProductList(List<Product> products, bool isRanked) {
+  Widget _buildProductList(List<Product> products) {
     return ListView.builder(
+      key: ValueKey('${selectedCategory}-${selectedAge ?? ''}-${selectedSkinType ?? ''}'),
       itemCount: products.length,
       itemBuilder: (context, index) {
         final product = products[index];
@@ -145,7 +158,7 @@ class _CategoryPageState extends State<CategoryPage> {
           ),
           title: Text(product.name),
           subtitle: Text(product.brand),
-          trailing: isRanked ? Text('#${index + 1}') : null,
+          trailing: Text('#${index + 1}'),
           onTap: () {
             Navigator.push(
               context,
@@ -157,68 +170,5 @@ class _CategoryPageState extends State<CategoryPage> {
         );
       },
     );
-  }
-
-  Future<void> _loadRankedProducts() async {
-    setState(() => isRankingLoading = true);
-
-    final snapshot = await FirebaseFirestore.instance.collection('products').get();
-    final products = snapshot.docs.map((doc) => Product.fromFirestore(doc)).toList();
-
-    final ageIndex = selectedAge != null ? ageOptions.indexOf(selectedAge!) - 1 : null;
-    final skinIndex = selectedSkinType != null ? skinTypeOptions.indexOf(selectedSkinType!) - 1 : null;
-
-    final scored = products.map((product) {
-      double? ageScore, skinScore;
-
-      if (ageIndex != null &&
-          ageIndex >= 0 &&
-          ageIndex < product.ageRatings.length &&
-          product.ageRatings[ageIndex]['avg'] != null) {
-        ageScore = (product.ageRatings[ageIndex]['avg'] as num).toDouble();
-      }
-
-      if (skinIndex != null &&
-          skinIndex >= 0 &&
-          skinIndex < product.skinTypeRatings.length &&
-          product.skinTypeRatings[skinIndex]['avg'] != null) {
-        skinScore = (product.skinTypeRatings[skinIndex]['avg'] as num).toDouble();
-      }
-
-      final score = ageScore != null || skinScore != null
-          ? ageScore != null && skinScore != null
-          ? (ageScore + skinScore) / 2
-          : ageScore ?? skinScore!
-          : product.rating;
-
-      return {'product': product, 'score': score};
-    }).toList();
-
-    scored.sort((a, b) {
-      final aScore = (a['score'] ?? 0.0) as double;
-      final bScore = (b['score'] ?? 0.0) as double;
-      return bScore.compareTo(aScore);
-    });
-
-    setState(() {
-      rankedProducts = scored.map((e) => e['product'] as Product).toList();
-      isRankingLoading = false;
-    });
-  }
-
-  Future<void> _loadCategoryProducts(String category) async {
-    setState(() => isCategoryLoading = true);
-
-    final snapshot = await FirebaseFirestore.instance
-        .collection('products')
-        .where('Category', isEqualTo: category)
-        .get();
-
-    final products = snapshot.docs.map((doc) => Product.fromFirestore(doc)).toList();
-
-    setState(() {
-      categoryProducts = products;
-      isCategoryLoading = false;
-    });
   }
 }

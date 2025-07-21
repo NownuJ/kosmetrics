@@ -15,7 +15,6 @@ class Product {
   final List<String> mediumIngredients;
   final List<String> highIngredients;
 
-  // These fields should be added if you're using them for ranking
   final List<dynamic> ageRatings;
   final List<dynamic> skinTypeRatings;
 
@@ -49,6 +48,18 @@ class Product {
     }
 
     List<Map<String, dynamic>> mapToRatingList(dynamic raw) {
+      if (raw is List) {
+        return raw.map((entry) {
+          if (entry is Map<String, dynamic>) {
+            return {
+              'avg': (entry['avg'] as num?)?.toDouble() ?? 0.0,
+              'count': (entry['count'] as num?)?.toInt() ?? 0,
+            };
+          }
+          return {'avg': 0.0, 'count': 0};
+        }).toList();
+      }
+
       if (raw is Map) {
         return List.generate(5, (i) {
           final entry = raw[i.toString()];
@@ -61,8 +72,10 @@ class Product {
           return {'avg': 0.0, 'count': 0};
         });
       }
+
       return List.generate(5, (_) => {'avg': 0.0, 'count': 0});
     }
+
 
     return Product(
       id: doc.id,
@@ -90,4 +103,34 @@ class Product {
     return 0.0;
   }
 
+  double getScore({int? ageIndex, int? skinTypeIndex}) {
+    double? ageScore, skinScore;
+
+    if (ageIndex != null &&
+        ageIndex >= 0 &&
+        ageIndex < ageRatings.length &&
+        ageRatings[ageIndex]['avg'] != null) {
+      ageScore = (ageRatings[ageIndex]['avg'] as num).toDouble();
+    }
+
+    if (skinTypeIndex != null &&
+        skinTypeIndex >= 0 &&
+        skinTypeIndex < skinTypeRatings.length &&
+        skinTypeRatings[skinTypeIndex]['avg'] != null) {
+      skinScore = (skinTypeRatings[skinTypeIndex]['avg'] as num).toDouble();
+    }
+
+    final finalScore = ageScore != null && skinScore != null
+        ? (ageScore + skinScore) / 2
+        : ageScore ?? skinScore ?? rating;
+
+    print('$name: ageScore=$ageScore, skinScore=$skinScore, finalScore=$finalScore');
+
+    return finalScore;
+  }
+
+  static Map<String, dynamic> rankWrap(Product product, {int? ageIndex, int? skinTypeIndex}) {
+    final score = product.getScore(ageIndex: ageIndex, skinTypeIndex: skinTypeIndex);
+    return {'product': product, 'score': score};
+  }
 }
