@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'myinfo_page.dart';
+import 'personal_recommendation_page.dart';
 
 class MyPage extends StatelessWidget {
   const MyPage({super.key});
@@ -7,7 +8,11 @@ class MyPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text("My Page")),
+      appBar: AppBar(
+        title: const Text("My Page"),
+        automaticallyImplyLeading: false,
+      ),
+
       body: ListView(
         children: [
           ListTile(
@@ -24,7 +29,11 @@ class MyPage extends StatelessWidget {
           ListTile(
             title: const Text("Personal Recommendation"),
             trailing: const Icon(Icons.arrow_forward_ios),
-            onTap: () { //to be implemented
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => const PersonalRecommendationPage()),
+              );
             },
           ),
         ],

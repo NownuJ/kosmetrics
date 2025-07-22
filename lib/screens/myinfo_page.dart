@@ -15,13 +15,12 @@ class _MyInfoPageState extends State<MyInfoPage> {
 
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _nicknameController = TextEditingController();
+  final TextEditingController _ageController = TextEditingController();
 
   String? _selectedGender;
-  String? _selectedAge;
   String? _selectedSkinType;
 
   final List<String> genderOptions = ['Female', 'Male', 'Prefer not to say'];
-  final List<String> ageOptions = ['20s', '30s', '40s', '50s', '60s+'];
   final List<String> skinTypeOptions = [
     'Dry',
     'Oily',
@@ -53,43 +52,16 @@ class _MyInfoPageState extends State<MyInfoPage> {
         _selectedGender = genderOptions[genderIndex];
       }
 
-      _selectedAge = _ageToString(data['age']);
+      final age = data['age'];
+      _ageController.text = age != null ? age.toString() : '';
+
       _selectedSkinType = _skinTypeToString(data['skinType']);
     });
-  }
-
-  String? _ageToString(dynamic age) {
-    if (age is int) {
-      if (age < 30) return '20s';
-      if (age < 40) return '30s';
-      if (age < 50) return '40s';
-      if (age < 60) return '50s';
-      return '60s+';
-    } else if (age is String) {
-      return age;
-    }
-    return null;
   }
 
   String? _skinTypeToString(dynamic index) {
     if (index is int && index >= 0 && index < skinTypeOptions.length) {
       return skinTypeOptions[index];
-    }
-    return null;
-  }
-
-  int? _ageStringToInt(String? ageStr) {
-    switch (ageStr) {
-      case '20s':
-        return 23;
-      case '30s':
-        return 33;
-      case '40s':
-        return 43;
-      case '50s':
-        return 53;
-      case '60s+':
-        return 63;
     }
     return null;
   }
@@ -108,9 +80,11 @@ class _MyInfoPageState extends State<MyInfoPage> {
     final user = _auth.currentUser;
     if (user == null) return;
 
+    final int? age = int.tryParse(_ageController.text.trim());
+
     await _firestore.collection('users').doc(user.uid).update({
       'gender': _genderToIndex(_selectedGender),
-      'age': _ageStringToInt(_selectedAge),
+      'age': age,
       'skinType': _skinTypeToIndex(_selectedSkinType),
     });
 
@@ -183,17 +157,22 @@ class _MyInfoPageState extends State<MyInfoPage> {
               controller: _nicknameController,
               readOnly: true,
             ),
+            const SizedBox(height: 12),
+            const Text("Age", style: TextStyle(fontSize: 16)),
+            const SizedBox(height: 8),
+            TextField(
+              controller: _ageController,
+              keyboardType: TextInputType.number,
+              decoration: const InputDecoration(
+                hintText: 'Enter your age (e.g. 27)',
+                border: OutlineInputBorder(),
+              ),
+            ),
             _buildToggleGroup<String>(
               label: "Gender",
               options: genderOptions,
               selectedValue: _selectedGender,
               onSelected: (val) => setState(() => _selectedGender = val),
-            ),
-            _buildToggleGroup<String>(
-              label: "Age",
-              options: ageOptions,
-              selectedValue: _selectedAge,
-              onSelected: (val) => setState(() => _selectedAge = val),
             ),
             _buildToggleGroup<String>(
               label: "Skin Type",
