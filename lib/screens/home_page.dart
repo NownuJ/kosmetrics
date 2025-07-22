@@ -4,7 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:kosmetric/screens/category_page.dart';
 import '../models/product_model.dart';
 import 'product_detail_page.dart';
-import 'placeholder_page.dart';
+import 'my_page.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -112,7 +112,7 @@ class _HomePageState extends State<HomePage> {
         children: [
           CategoryPage(),
           _buildHomePage(),
-          const PlaceholderPage('My Page'),
+          const MyPage(),
         ],
       ),
       bottomNavigationBar: BottomNavigationBar(
