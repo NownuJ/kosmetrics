@@ -51,7 +51,7 @@ class _PersonalRecommendationPageState extends State<PersonalRecommendationPage>
   }
 
   String _mapAgeToString(int age) {
-    if (age < 30) return '20s';
+    if (age < 30) return '10/20s';
     if (age < 40) return '30s';
     if (age < 50) return '40s';
     if (age < 60) return '50s';
