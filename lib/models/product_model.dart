@@ -10,6 +10,7 @@ class Product {
   final double oiliness;
   final double irritation;
   final double stickiness;
+  final String category;
 
   final List<String> lowIngredients;
   final List<String> mediumIngredients;
@@ -33,6 +34,7 @@ class Product {
     required this.highIngredients,
     required this.ageRatings,
     required this.skinTypeRatings,
+    required this.category,
   });
 
   factory Product.fromFirestore(DocumentSnapshot doc) {
@@ -83,6 +85,7 @@ class Product {
       brand: data['brand'] ?? data['Brand'] ?? '',
       imageUrl: data['imageUrl'] ?? '',
       rating: _parseDouble(data['rating']),
+      category: data['category'] ?? '',
       hydration: _parseDouble(data['Hydration']),
       oiliness: _parseDouble(data['Oiliness']),
       irritation: _parseDouble(data['Irritation']),
