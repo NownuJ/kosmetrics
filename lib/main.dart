@@ -1,4 +1,3 @@
-// lib/main.dart
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -41,13 +40,19 @@ class MyApp extends StatelessWidget {
 
   int newUserId = 0;
   List<User> users = [];
-  // user has username, password, age, gender, skin type
 
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Signup Flow Demo',
+      theme: ThemeData(
+        colorScheme: ColorScheme.fromSeed(
+          seedColor: Color.fromARGB(255, 0, 120, 255),
+          brightness: Brightness.light,
+        ),
+        useMaterial3: true,
+      ),
       initialRoute: '/',
       routes: {
         '/': (context) => WelcomeScreen(signupData: SignupData()),
@@ -58,11 +63,6 @@ class MyApp extends StatelessWidget {
         '/signup_step4': (context) => SignupStep4Screen(signupData: SignupData()),
         '/welcome_user': (context) => PlaceholderPage('Welcome User'),
         '/home': (context) => PlaceholderPage('Home'),
-
-
-
-        // to navigate through routes,
-        // use Navigator.pushNamed(context, '/route_name')
       },
     );
   }

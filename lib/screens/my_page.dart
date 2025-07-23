@@ -16,7 +16,7 @@ class MyPage extends StatelessWidget {
       body: ListView(
         children: [
           ListTile(
-            title: const Text("Nickname"),
+            title: const Text("My Info"),
             subtitle: const Text("Age / Gender / SkinType"),
             trailing: const Icon(Icons.arrow_forward_ios),
             onTap: () {

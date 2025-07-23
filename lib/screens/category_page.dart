@@ -14,7 +14,7 @@ class _CategoryPageState extends State<CategoryPage> {
     'Ranking', 'Toners', 'Lotions', 'Sunscreens', 'Moisturisers', 'Cleansers'
   ];
 
-  final List<String> ageOptions = ['Clear Selection', '20s', '30s', '40s', '50s', '60s+'];
+  final List<String> ageOptions = ['Clear Selection', '10/20s', '30s', '40s', '50s', '60s+'];
   final List<String> skinTypeOptions = ['Clear Selection', 'Dry', 'Oily', 'Combination', 'Normal', 'Dry & Oily'];
 
   String selectedCategory = 'Ranking';
@@ -107,7 +107,7 @@ class _CategoryPageState extends State<CategoryPage> {
       body: Row(
         children: [
           Container(
-            width: 120,
+            width: 140,
             color: Colors.grey[200],
             child: ListView.builder(
               itemCount: categories.length,

@@ -1,4 +1,3 @@
-// lib/screens/signup_step2_screen.dart
 import 'package:flutter/material.dart';
 import 'package:kosmetric/screens/signup_step3_screen.dart';
 import '../models/signup_data.dart';

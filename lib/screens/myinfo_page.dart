@@ -137,7 +137,7 @@ class _MyInfoPageState extends State<MyInfoPage> {
             onPressed: _saveUserInfo,
             child: const Text(
               'Save',
-              style: TextStyle(color: Colors.white),
+              style: TextStyle(color: Colors.black),
             ),
           )
         ],

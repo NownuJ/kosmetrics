@@ -1,8 +1,6 @@
-// lib/screens/start_screen.dart
 import 'package:flutter/material.dart';
 import '../models/signup_data.dart';
 import '../screens/home_page.dart';
-
 
 class StartScreen extends StatelessWidget {
   final SignupData signupData;

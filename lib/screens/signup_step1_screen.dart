@@ -1,4 +1,3 @@
-// lib/screens/signup_step1_screen.dart
 import 'package:flutter/material.dart';
 import '../models/signup_data.dart';
 import 'signup_step2_screen.dart';
