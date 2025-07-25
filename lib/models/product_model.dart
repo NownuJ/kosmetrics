@@ -90,9 +90,9 @@ class Product {
       oiliness: _parseDouble(data['Oiliness']),
       irritation: _parseDouble(data['Irritation']),
       stickiness: _parseDouble(data['Stickiness']),
-      lowIngredients: parseIngredients(data['low']),
-      mediumIngredients: parseIngredients(data['medium']),
-      highIngredients: parseIngredients(data['high']),
+      lowIngredients: parseIngredients(data['Low']),
+      mediumIngredients: parseIngredients(data['Medium']),
+      highIngredients: parseIngredients(data['High']),
       ageRatings: mapToRatingList(data['ageRatings']),
       skinTypeRatings: mapToRatingList(data['skinTypeRatings']),
     );
