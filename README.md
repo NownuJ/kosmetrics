@@ -23,6 +23,8 @@ To run Kosmetric locally:
    git clone https://github.com/your-username/kosmetrics.git
    cd kosmetric
 2. Install dependencies
+   ```bash
    flutter pub get
 3. Run the app
+   ```bash
    flutter run
