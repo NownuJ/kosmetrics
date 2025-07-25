@@ -1,16 +1,28 @@
-# kosmetric
+# Kosmetric
 
-Orbital 
+Kosmetric is a skincare recommendation app built with Flutter as part of NUS Orbital 2025.
+It helps users discover cosmetic products that suit their skin type and age group, based on real user reviews and filtering options.
 
-## Getting Started
 
-This project is a starting point for a Flutter application.
+## Features
 
-A few resources to get you started if this is your first Flutter project:
+- User account authentication
+- Onboarding
+- Home screen showing top-rated products based on randomised criteria (e.g. Best for 20s, Best for Dry Skin)
+- Product detail page with cosmetic products info with review system
+- Category page with filters by age group and skin type, showing ranked results
+- My Info page for editing user profile
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+## Installation
+
+To run Kosmetric locally:
+
+1. Clone the repository
+   ```bash
+   git clone https://github.com/your-username/kosmetrics.git
+   cd kosmetric
+2. Install dependencies
+   flutter pub get
+3. Run the app
+   flutter run
