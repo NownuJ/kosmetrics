@@ -18,7 +18,7 @@ class _RankingListPageState extends State<RankingListPage> {
   List<Product> _rankedProducts = [];
   bool _isLoading = true;
 
-  final List<String> ageOptions = ['20s', '30s', '40s', '50s', '60s+'];
+  final List<String> ageOptions = ['10/20s', '30s', '40s', '50s', '60s+'];
   final List<String> skinTypeOptions = ['Dry', 'Oily', 'Combination', 'Normal', 'Dry & Oily'];
 
   @override

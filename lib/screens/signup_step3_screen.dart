@@ -22,21 +22,29 @@ class _SignupStep3ScreenState extends State<SignupStep3Screen> {
   }
 
   void _goToNextStep() {
-    if (_selectedGender != null) {
-      switch (_selectedGender) {
-        case 'Female':
-          widget.signupData.gender = 0;
-          break;
-        case 'Male':
-          widget.signupData.gender = 1;
-          break;
-        case 'Prefer not to say':
-          widget.signupData.gender = 2;
-          break;
-      }
+    final ageText = _ageController.text.trim();
+    final age = int.tryParse(ageText);
+
+    if (_selectedGender == null || age == null || age <= 9) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Please select gender and enter a valid age')),
+      );
+      return;
     }
 
-    widget.signupData.age = int.tryParse(_ageController.text) ?? 0;
+    switch (_selectedGender) {
+      case 'Female':
+        widget.signupData.gender = 0;
+        break;
+      case 'Male':
+        widget.signupData.gender = 1;
+        break;
+      case 'Prefer not to say':
+        widget.signupData.gender = 2;
+        break;
+    }
+
+    widget.signupData.age = age;
 
     Navigator.push(
       context,
@@ -45,7 +53,6 @@ class _SignupStep3ScreenState extends State<SignupStep3Screen> {
       ),
     );
   }
-
 
   @override
   Widget build(BuildContext context) {

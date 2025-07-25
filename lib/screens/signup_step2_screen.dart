@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:kosmetric/screens/signup_step3_screen.dart';
 import '../models/signup_data.dart';
-
 
 class SignupStep2Screen extends StatefulWidget {
   final SignupData signupData;
@@ -21,8 +21,35 @@ class _SignupStep2ScreenState extends State<SignupStep2Screen> {
     super.dispose();
   }
 
-  void _goToNextStep() {
-    widget.signupData.nickname = _nicknameController.text;
+  Future<bool> isNicknameTaken(String nickname) async {
+    final query = await FirebaseFirestore.instance
+        .collection('users')
+        .where('nickname', isEqualTo: nickname)
+        .limit(1)
+        .get();
+
+    return query.docs.isNotEmpty;
+  }
+
+  void _goToNextStep() async {
+    final nickname = _nicknameController.text.trim();
+
+    if (nickname.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Please enter a nickname')),
+      );
+      return;
+    }
+
+    final exists = await isNicknameTaken(nickname);
+    if (exists) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Nickname already taken')),
+      );
+      return;
+    }
+
+    widget.signupData.nickname = nickname;
 
     Navigator.push(
       context,

@@ -18,24 +18,30 @@ class _SignupStep4ScreenState extends State<SignupStep4Screen> {
   final List<String> _skinTypes = ['Dry', 'Oily', 'Combination', 'Normal', 'Dry & Oily'];
 
   void _goToNextStep() async {
-    if (_selectedSkinType != null) {
-      switch (_selectedSkinType) {
-        case 'Dry':
-          widget.signupData.skinType = 0;
-          break;
-        case 'Oily':
-          widget.signupData.skinType = 1;
-          break;
-        case 'Combination':
-          widget.signupData.skinType = 2;
-          break;
-        case 'Normal':
-          widget.signupData.skinType = 3;
-          break;
-        case 'Dry & Oily':
-          widget.signupData.skinType = 4;
-          break;
-      }
+    if (_selectedSkinType == null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Please select a skin type')),
+      );
+      return;
+    }
+
+    // 저장
+    switch (_selectedSkinType) {
+      case 'Dry':
+        widget.signupData.skinType = 0;
+        break;
+      case 'Oily':
+        widget.signupData.skinType = 1;
+        break;
+      case 'Combination':
+        widget.signupData.skinType = 2;
+        break;
+      case 'Normal':
+        widget.signupData.skinType = 3;
+        break;
+      case 'Dry & Oily':
+        widget.signupData.skinType = 4;
+        break;
     }
 
     try {
@@ -68,7 +74,6 @@ class _SignupStep4ScreenState extends State<SignupStep4Screen> {
       );
     }
   }
-
 
   @override
   Widget build(BuildContext context) {

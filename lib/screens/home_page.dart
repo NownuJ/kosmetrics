@@ -16,7 +16,7 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   int _selectedIndex = 1;
 
-  final List<String> ageOptions = ['20s', '30s', '40s', '50s', '60s+'];
+  final List<String> ageOptions = ['10/20s', '30s', '40s', '50s', '60s+'];
   final List<String> skinOptions = ['Dry', 'Oily', 'Combination', 'Normal', 'Dry & Oily'];
   final List<String> categoryOptions = ['Sunscreen', 'Toner', 'Lotion', 'Cleansing', 'Suncream'];
 
