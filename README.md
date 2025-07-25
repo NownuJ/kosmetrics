@@ -20,9 +20,8 @@ To run Kosmetric locally:
 
 1. Clone the repository
    ```bash
-   git clone https://github.com/NownuJ/kosmetrics.git kosmetrics-copy
-   cd kosmetrics-copy
-
+   git clone https://github.com/NownuJ/kosmetrics.git
+   cd kosmetrics
 2. Install dependencies
    ```bash
    flutter pub get
